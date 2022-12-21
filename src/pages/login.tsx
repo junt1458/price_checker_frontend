@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import Test from '../components/test';
 import { useRequireNoLogin } from '../hooks/useLoginState';
 
 const IndexPage: NextPage = () => {
