@@ -1,4 +1,4 @@
-FROM node:18.12-slim as builder
+FROM node:19.3-slim as builder
 WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
@@ -10,7 +10,7 @@ COPY src/ ./src/
 COPY public/ ./public/
 RUN yarn build
 
-FROM node:18.12-slim as runner
+FROM node:19.3-slim as runner
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
