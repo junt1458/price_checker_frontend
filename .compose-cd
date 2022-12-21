@@ -1,0 +1,3 @@
+REPO="git@github.com/junt1458/price_checker_frontend"
+UPDATE_REPO_ONLY="true"
+RESTART_WITH_BUILD="true"

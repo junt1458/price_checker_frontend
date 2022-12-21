@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    restart: unless-stopped
+    build: .
+    networks:
+      - frontend_cloudflared
+
+  cloudflared:
+    restart: unless-stopped
+    image: crazymax/cloudflared:2022.10.2
+    user: root
+    depends_on:
+      - frontend
+    command: tunnel --hostname price-checker.db0.jp --url http://frontend:3000 --name price-checker.db0.jp
+    volumes:
+      - /etc/cloudflared:/etc/cloudflared
+    networks:
+      - frontend_cloudflared
+      - cloudflared_internet
+
+networks:
+  frontend_cloudflared:
+    name: price_checker__frontend_cloudflared
+    internal: true
+  cloudflared_internet:
+    name: price_checker__cloudflared_internet

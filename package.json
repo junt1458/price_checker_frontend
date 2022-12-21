@@ -1,0 +1,44 @@
+{
+  "name": "price_checker_frontend",
+  "license": "MIT",
+  "volta": {
+    "node": "18.12.1",
+    "yarn": "1.22.19"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "start": "next start",
+    "build": "yarn lint && next build",
+    "lint": "npm-run-all -p lint:*",
+    "lint:next": "next lint --dir src --fix",
+    "lint:eslint": "eslint src --ext .ts,.tsx --fix",
+    "lint:format": "prettier --write --ignore-path .gitignore \"./src/components/**/*.{ts,tsx}\" \"./src/pages/**/*.{ts,tsx}\""
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "next": "^13.0.7",
+    "nookies": "^2.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recoil": "^0.7.6"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.17",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@types/recoil": "^0.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "eslint": "^8.30.0",
+    "eslint-config-next": "^13.0.7",
+    "eslint-config-prettier": "^8.5.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.20",
+    "prettier": "^2.8.1",
+    "prettier-plugin-tailwindcss": "^0.2.1",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.9.4"
+  }
+}
