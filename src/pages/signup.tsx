@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
+import { SERVER_URI } from '../constants';
 
 const SignupPage: NextPage = () => {
   const router = useRouter();
@@ -56,11 +57,45 @@ const SignupPage: NextPage = () => {
 
     setLoggingIn(true);
 
-    // TODO: ここに通信処理を書く
-    setCookie(null, 'token', id + ':' + pass);
-    router.push('/');
-
-    setLoggingIn(false);
+    fetch(SERVER_URI + '/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: id,
+        pass: pass,
+      }),
+    })
+      .then((r) => r.json())
+      .then((r) => {
+        if (r.status) {
+          // 同じ情報でログイン処理をする。
+          fetch(SERVER_URI + '/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              address: id,
+              pass: pass,
+            }),
+          })
+            .then((r) => r.json())
+            .then((r) => {
+              setLoggingIn(false);
+              if (r.status && r.token != null) {
+                setCookie(null, 'token', r.token);
+                router.push('/');
+              } else {
+                setSignupError('登録に失敗しました。');
+              }
+            });
+        } else {
+          setSignupError('登録に失敗しました。');
+          setLoggingIn(false);
+        }
+      });
   };
 
   return (

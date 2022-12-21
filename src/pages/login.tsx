@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
+import { SERVER_URI } from '../constants';
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -56,11 +57,26 @@ const LoginPage: NextPage = () => {
 
     setLoggingIn(true);
 
-    // TODO: ここに通信処理を書く
-    setCookie(null, 'token', id + ':' + pass);
-    router.push('/');
-
-    setLoggingIn(false);
+    fetch(SERVER_URI + '/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: id,
+        pass: pass,
+      }),
+    })
+      .then((r) => r.json())
+      .then((r) => {
+        setLoggingIn(false);
+        if (r.status && r.token != null) {
+          setCookie(null, 'token', r.token);
+          router.push('/');
+        } else {
+          setLoginError('ログインに失敗しました。');
+        }
+      });
   };
 
   return (
