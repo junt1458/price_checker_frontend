@@ -6,12 +6,12 @@ import { ChangeEvent, useState } from 'react';
 import { setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 
-const LoginPage: NextPage = () => {
+const SignupPage: NextPage = () => {
   const router = useRouter();
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passError, setPassError] = useState('');
-  const [loginError, setLoginError] = useState('');
+  const [signupError, setSignupError] = useState('');
 
   useRequireNoLogin();
 
@@ -40,8 +40,8 @@ const LoginPage: NextPage = () => {
     setPassError('');
   };
 
-  const handleLogin = () => {
-    setLoginError('');
+  const handleSignup = () => {
+    setSignupError('');
 
     const id = (document.getElementById('user') as HTMLInputElement).value;
     const pass = (document.getElementById('pass') as HTMLInputElement).value;
@@ -50,7 +50,7 @@ const LoginPage: NextPage = () => {
       !id.match(/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/) ||
       pass == ''
     ) {
-      setLoginError('未入力の項目があります。');
+      setSignupError('未入力の項目があります。');
       return;
     }
 
@@ -71,7 +71,7 @@ const LoginPage: NextPage = () => {
           <span className='px-4 text-2xl font-bold'>Price Checker</span>
         </div>
       </div>
-      <span className='my-5 block text-center text-xl font-bold'>ログイン</span>
+      <span className='my-5 block text-center text-xl font-bold'>新規登録</span>
       <div className='mx-auto w-[95%] max-w-[600px] rounded-md border-2 border-gray-500 p-5'>
         <div className='flex'>
           <i className='fa-regular fa-envelope w-[38px] rounded-l border border-gray-700 bg-slate-200 px-2 py-1 text-center text-xl' />
@@ -102,7 +102,7 @@ const LoginPage: NextPage = () => {
         <div className='mb-4 pl-[38px] text-red-600'>{passError}</div>
 
         <span className='block text-center font-bold text-blue-600 underline hover:text-blue-700'>
-          <Link href='/signup'>新規登録する場合はこちら</Link>
+          <Link href='/login'>すでにアカウントをお持ちの場合はこちら</Link>
         </span>
 
         <div className='mt-4 w-full text-center'>
@@ -110,15 +110,15 @@ const LoginPage: NextPage = () => {
             type='button'
             className='rounded-md bg-blue-500 px-8 py-2 text-white'
             disabled={isLoggingIn}
-            onClick={handleLogin}
+            onClick={handleSignup}
           >
-            {isLoggingIn ? 'ログイン中...' : 'ログイン'}
+            {isLoggingIn ? '登録中...' : '新規登録'}
           </button>
-          <div className=' mt-4 text-red-600'>{loginError}</div>
+          <div className=' mt-4 text-red-600'>{signupError}</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;
