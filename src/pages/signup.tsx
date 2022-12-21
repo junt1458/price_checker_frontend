@@ -12,6 +12,7 @@ const SignupPage: NextPage = () => {
   const [isLoggingIn, setLoggingIn] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passError, setPassError] = useState('');
+  const [passError2, setPassError2] = useState('');
   const [signupError, setSignupError] = useState('');
 
   useRequireNoLogin();
@@ -41,6 +42,21 @@ const SignupPage: NextPage = () => {
     setPassError('');
   };
 
+  const handleChangePassword2 = (e: ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    if (text == '') {
+      setPassError2('入力されていません。');
+      return;
+    }
+
+    if (text != (document.getElementById('pass') as HTMLInputElement).value) {
+      setPassError2('入力値が一致しません。');
+      return;
+    }
+
+    setPassError2('');
+  };
+
   const handleSignup = () => {
     setSignupError('');
 
@@ -52,6 +68,11 @@ const SignupPage: NextPage = () => {
       pass == ''
     ) {
       setSignupError('未入力の項目があります。');
+      return;
+    }
+
+    if (pass != (document.getElementById('pass2') as HTMLInputElement).value) {
+      setSignupError('パスワードが一致しません。');
       return;
     }
 
@@ -135,6 +156,20 @@ const SignupPage: NextPage = () => {
           </div>
         </div>
         <div className='mb-4 pl-[38px] text-red-600'>{passError}</div>
+
+        <div className='mt-4 flex'>
+          <i className='fa fa-lock w-[38px] rounded-l border border-gray-700 bg-slate-200 px-2 py-1 text-center text-xl' />
+          <div className='block flex-1 overflow-hidden rounded-r border-r border-t border-b border-gray-700 bg-cyan-100'>
+            <input
+              id='pass2'
+              type='password'
+              className='h-full w-full px-2'
+              placeholder='パスワード(確認)'
+              onChange={handleChangePassword2}
+            ></input>
+          </div>
+        </div>
+        <div className='mb-4 pl-[38px] text-red-600'>{passError2}</div>
 
         <span className='block text-center font-bold text-blue-600 underline hover:text-blue-700'>
           <Link href='/login'>すでにアカウントをお持ちの場合はこちら</Link>
