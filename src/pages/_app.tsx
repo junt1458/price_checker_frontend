@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import Image from 'next/image';
 import { parseCookies } from 'nookies';
 import { useEffect } from 'react';
 import { useSetRecoilState, RecoilRoot } from 'recoil';
@@ -23,9 +24,20 @@ const AppInit: React.FunctionComponent = () => {
   return null;
 };
 
+const LoadingScreen: React.FunctionComponent = () => {
+  return (
+    <div className='flex h-screen w-screen items-center justify-center'>
+      <div className='block text-center'>
+        <Image src='/static/loading.svg' width={128} height={128} alt='Loading Spinner' />
+        読み込み中...
+      </div>
+    </div>
+  );
+};
+
 const ContentSwitcher: React.FunctionComponent<{ children: JSX.Element }> = ({ children }) => {
   const { isLoginChecking } = useLoginState();
-  return isLoginChecking ? <>Loading...</> : children;
+  return isLoginChecking ? <LoadingScreen /> : children;
 };
 
 const App = ({ Component, pageProps }: AppProps) => {
