@@ -31,7 +31,7 @@ const Header: React.FunctionComponent = () => {
       <div className='flex h-[55px] w-screen items-center justify-between bg-slate-300 px-3 md:justify-start'>
         <div className='flex items-center'>
           <Image src='/static/Icon.svg' width='32' height='32' alt='logo' />
-          <span className='px-3 text-lg font-bold'>Price Checker</span>
+          <span className='px-3 text-lg font-bold'>Rahoo!</span>
         </div>
         <button className='inline md:hidden' type='button' onClick={() => setOpen((o) => !o)}>
           <div className='flex h-9 w-9 items-center justify-center rounded-md border border-gray-600 text-xl'>
