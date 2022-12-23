@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { parseCookies } from 'nookies';
 import { useEffect } from 'react';
 import { useSetRecoilState, RecoilRoot } from 'recoil';
+import { SERVER_URI } from '../constants';
 import { useLoginState } from '../hooks/useLoginState';
 import { loginState } from '../states/loginState';
 import '../styles/globals.css';
@@ -13,9 +14,19 @@ const AppInit: React.FunctionComponent = () => {
 
   useEffect(() => {
     const asyncProcess = async () => {
-      // NOTE: ここでトークンの確認などを行う場合には処理を追記する
       const cookies = parseCookies();
-      setLoginState(cookies.token != null);
+      if (cookies.token == null) {
+        setLoginState(false);
+        return;
+      }
+
+      const req = await fetch(SERVER_URI + '/check', {
+        headers: {
+          Authorization: 'Bearer ' + cookies.token,
+        },
+      });
+      const res = await req.json();
+      setLoginState(res.status);
     };
 
     asyncProcess();
