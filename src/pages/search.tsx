@@ -6,27 +6,7 @@ import Header from '../components/header';
 import NotificationHandler from '../components/notificationHandler';
 import { SERVER_URI } from '../constants';
 import { useRequireLogin } from '../hooks/useLoginState';
-
-interface SearchData {
-  image: string;
-  janCode: string;
-  name: string;
-  price: number;
-  seller: string;
-  shipping: string;
-  url: string;
-}
-
-interface RegisteredData {
-  image: string;
-  item_code: string;
-  name: string;
-  price: number;
-  seller: string;
-  shipping: string;
-  url: string;
-  border_price: number;
-}
+import { RegisteredData, SearchData } from '../interfaces';
 
 const SearchPage: NextPage = () => {
   useRequireLogin();
@@ -55,7 +35,7 @@ const SearchPage: NextPage = () => {
     updateRegisteredJans();
   }, []);
 
-  const handleRegister = async (jan: string) => {
+  const handleRegister = async (data: SearchData) => {
     const cookies = parseCookies();
 
     const registeredJans = await new Promise<string[]>((resolve) => {
@@ -67,10 +47,10 @@ const SearchPage: NextPage = () => {
 
     let endpoint = '';
     const body: Record<string, string | number> = {
-      item_code: jan,
+      item_code: data.janCode,
     };
 
-    if (!registeredJans.includes(jan)) {
+    if (!registeredJans.includes(data.janCode)) {
       const input = prompt('通知を送信する価格を入力してください。（単位: 円）');
       if (input == null || input == '') return;
 
@@ -81,6 +61,10 @@ const SearchPage: NextPage = () => {
       }
 
       body['border_price'] = val;
+      Object.keys(data).forEach((k) => {
+        body[k] = data[k as keyof SearchData];
+      });
+
       endpoint = '/add';
     } else {
       endpoint = '/remove';
@@ -144,8 +128,6 @@ const SearchPage: NextPage = () => {
     setItemData(res.items == null ? [] : res.items);
     setStatusMessage(res.items.length + '件の商品が見つかりました。');
     setIsError(false);
-
-    console.log(res.items);
   };
 
   return (
@@ -175,44 +157,53 @@ const SearchPage: NextPage = () => {
         >
           {statusMessage}
         </span>
-        <div
-          className={
-            'mx-auto mt-9 mb-4 max-w-[1000px] rounded-lg border border-gray-600' +
-            (itemData.length ? '' : ' hidden')
-          }
-        >
-          {itemData.map((v, i) => (
-            <div
-              key={'item_' + i}
-              className='flex flex-wrap border-gray-500 px-2 py-1 [&:nth-child(n+2)]:border-t'
-            >
-              <div className='m-2 h-36 w-36 min-w-[144px]'>
-                <img src={v.image} alt='Item Image' />
-              </div>
-              <div className='m-2 flex-1'>
-                {v.name.replaceAll('&amp;', '&')}
-                {v.price}
-                {v.seller.replaceAll('&amp;', '&')}
-                {v.shipping}
-              </div>
-              <div className='m-2 block h-40 min-w-[160px]'>
-                <Link href={v.url} target='_blank' rel='noopener noreferrer'>
-                  <button className='my-2 block w-full rounded-lg bg-green-600 py-1 text-white'>
-                    サイトで見る
+        <div className='px-4'>
+          <div
+            className={
+              'mx-auto mt-9 mb-4 max-w-[1000px] rounded-lg border border-gray-600' +
+              (itemData.length ? '' : ' hidden')
+            }
+          >
+            {itemData.map((v, i) => (
+              <div
+                key={'item_' + i}
+                className='flex flex-wrap items-center border-gray-500 px-2 py-1 [&:nth-child(n+2)]:border-t'
+              >
+                <div className='m-2 h-36 w-36 min-w-[144px]'>
+                  <img src={v.image} alt='Item Image' />
+                </div>
+                <div className='m-2 flex-1'>
+                  <h2>{v.name.replaceAll('&amp;', '&')}</h2>
+                  <br />
+                  <h3>
+                    値段:{' '}
+                    <span className='text-2xl text-red-600 underline'>
+                      {v.price.toLocaleString()}円
+                    </span>
+                  </h3>
+                  <h4>送料区分: {v.shipping}</h4>
+                  <br />
+                  <h5>販売者: {v.seller.replaceAll('&amp;', '&')}</h5>
+                </div>
+                <div className='m-2 block min-w-[160px]'>
+                  <Link href={v.url} target='_blank' rel='noopener noreferrer'>
+                    <button className='my-2 block w-full rounded-lg bg-green-600 py-1 text-white'>
+                      サイトで見る
+                    </button>
+                  </Link>
+                  <button
+                    className={
+                      'my-2 block w-full rounded-lg py-1 text-white ' +
+                      (registeredJans.includes(v.janCode) ? 'bg-red-600' : 'bg-blue-600')
+                    }
+                    onClick={() => handleRegister(v)}
+                  >
+                    {registeredJans.includes(v.janCode) ? '登録解除' : '登録'}
                   </button>
-                </Link>
-                <button
-                  className={
-                    'my-2 block w-full rounded-lg py-1 text-white ' +
-                    (registeredJans.includes(v.janCode) ? 'bg-red-600' : 'bg-blue-600')
-                  }
-                  onClick={() => handleRegister(v.janCode)}
-                >
-                  {registeredJans.includes(v.janCode) ? '登録解除' : '登録'}
-                </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </>
     </NotificationHandler>
