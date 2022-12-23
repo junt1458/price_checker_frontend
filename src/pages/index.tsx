@@ -10,7 +10,7 @@ const IndexPage: NextPage = () => {
     <NotificationHandler>
       <>
         <Header />
-        <div className='bg-slate-400'>Index</div>
+        <h1 className='w-full py-4 text-center text-2xl font-bold'>登録リスト</h1>
       </>
     </NotificationHandler>
   );
