@@ -1,17 +1,34 @@
 import 'firebase/messaging';
-import firebase from 'firebase/app';
 import { useEffect } from 'react';
 import { firebaseCloudMessaging } from '../utils/firebase';
 import { SERVER_URI } from '../constants';
+import { useLoginState } from '../hooks/useLoginState';
+import { parseCookies } from 'nookies';
 
 const NotificationHandler: React.FunctionComponent<{ children: JSX.Element }> = ({ children }) => {
+  const { isLoginChecking, loginState } = useLoginState();
+
   useEffect(() => {
+    if (isLoginChecking || !loginState) return;
+
     const setToken = async () => {
       try {
         const token = await firebaseCloudMessaging.init();
         if (token) {
-          console.log('token', token);
-          fetch(SERVER_URI + '/' + token);
+          const cookies = parseCookies();
+
+          const req = await fetch(SERVER_URI + '/token_register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + cookies.token,
+            },
+            body: JSON.stringify({
+              device_token: token,
+            }),
+          });
+          const res = await req.json();
+          console.log(res);
         }
       } catch (error) {
         console.error(error);
@@ -28,7 +45,7 @@ const NotificationHandler: React.FunctionComponent<{ children: JSX.Element }> = 
         location.href = event.data.data.url;
       });
     }
-  }, []);
+  }, [isLoginChecking, loginState]);
 
   return <>{children}</>;
 };

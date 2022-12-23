@@ -1,4 +1,5 @@
-export const SERVER_URI = 'https://pc-api.db0.jp';
+// export const SERVER_URI = 'https://pc-api.db0.jp';
+export const SERVER_URI = 'http://localhost:9002';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyDwLusKU0td4H3jlgQnp5E2nXhhxDSPzTs',

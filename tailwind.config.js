@@ -8,7 +8,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        "xs": { "min": "400px" }
+        "xs": { "min": "400px" },
+        "md": { "min": "600px" }
       }
     },
   },
