@@ -59,7 +59,20 @@ const Header: React.FunctionComponent = () => {
           </div>
         </div>
       </div>
-      <div className={'w-screen bg-slate-300' + (open ? ' block' : ' hidden')}>background</div>
+      <div className={'w-screen bg-slate-300' + (open ? ' block' : ' hidden')}>
+        {links.map((v) => (
+          <Link
+            className={router.pathname == v.path ? ' font-bold' : ''}
+            href={v.path}
+            key={v.path}
+          >
+            <div className='mx-3 border-b-[1px] border-gray-600 py-2 px-1 text-xl'>{v.label}</div>
+          </Link>
+        ))}
+        <button type='button' onClick={() => handleLogout()}>
+          <div className='mx-3 mb-3 border-gray-600 py-2 px-1 text-xl'>ログアウト</div>
+        </button>
+      </div>
     </>
   );
 };
