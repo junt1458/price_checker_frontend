@@ -1,5 +1,14 @@
-// export const SERVER_URI = 'https://pc-api.db0.jp';
-export const SERVER_URI = 'http://localhost:9002';
+const getServerURI = (): string => {
+  if (process.browser) {
+    const domain = document.domain.toLowerCase();
+    if (domain === 'pc-dev.db0.jp') {
+      return 'http://localhost:9002';
+    }
+  }
+  return 'https://pc-api.db0.jp';
+};
+
+export const SERVER_URI = getServerURI();
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyDwLusKU0td4H3jlgQnp5E2nXhhxDSPzTs',
