@@ -84,7 +84,7 @@ const LoginPage: NextPage = () => {
       <div className='mt-5 flex justify-center py-3'>
         <div className='justfy-center flex items-center'>
           <Image src='/static/Icon.svg' width={64} height={64} alt='Logo' />
-          <span className='px-4 text-2xl font-bold'>Price Checker</span>
+          <span className='px-4 text-2xl font-bold'>Rahoo!</span>
         </div>
       </div>
       <span className='my-5 block text-center text-xl font-bold'>ログイン</span>
