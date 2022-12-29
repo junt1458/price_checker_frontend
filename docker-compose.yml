@@ -9,7 +9,7 @@ services:
 
   cloudflared:
     restart: unless-stopped
-    image: crazymax/cloudflared:2022.10.2
+    image: crazymax/cloudflared:2022.12.1
     user: root
     depends_on:
       - frontend
