@@ -2,7 +2,7 @@
   "name": "price_checker_frontend",
   "license": "MIT",
   "volta": {
-    "node": "18.12.1",
+    "node": "18.20.4",
     "yarn": "1.22.19"
   },
   "scripts": {
